@@ -1,15 +1,23 @@
-import { useGetContactsQuery } from 'services/contactsApi';
+import PropTypes from 'prop-types';
 import { ContactListItem } from 'components/ContactListItem';
 import styles from './ContactList.module.css';
 
-export const ContactList = () => {
-  const { data = [] } = useGetContactsQuery();
-  console.log(data);
+export const ContactList = ({ contacts }) => {
   return (
     <ul className={styles.contactList}>
-      {data.map(({ id, name, phone }) => (
+      {contacts.map(({ id, name, phone }) => (
         <ContactListItem key={id} id={id} name={name} number={phone} />
       ))}
     </ul>
   );
+};
+
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      number: PropTypes.string,
+    })
+  ),
 };

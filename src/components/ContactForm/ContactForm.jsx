@@ -1,4 +1,9 @@
-import { useAddContactsMutation } from 'services/contactsApi';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'services/contactsApi';
+import { toast } from 'react-toastify';
+
 import { v4 as uuidv4 } from 'uuid';
 import { ImPencil } from 'react-icons/im';
 import styles from './ContactForm.module.css';
@@ -7,14 +12,25 @@ const nameInputId = uuidv4();
 const numberInputId = uuidv4();
 
 export const ContactForm = () => {
-  const [addContact] = useAddContactsMutation();
+  const { data } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
     const name = form.elements.name.value;
     const number = form.elements.number.value;
-    console.log(`${name}: ${number}`);
+
+    const normalizedName = name.toLowerCase();
+    if (!name.trim() || !number.trim()) {
+      toast.error('Please, enter Name and Number', { position: 'top-center' });
+      return;
+    }
+
+    if (data.find(({ name }) => name.toLowerCase() === normalizedName)) {
+      toast.warn(`${name} is already in contacts`);
+      return;
+    }
     addContact({ name, phone: number });
     form.reset();
   };

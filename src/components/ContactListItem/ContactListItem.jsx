@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
 import { ImBin } from 'react-icons/im';
 import styles from './ContactListItem.module.css';
-import { useDeleteContactsMutation } from 'services/contactsApi';
+import { useDeleteContactMutation } from 'services/contactsApi';
 
 export const ContactListItem = ({ id, name, number }) => {
-  const [deleteContact] = useDeleteContactsMutation();
+  const [deleteContact] = useDeleteContactMutation();
+  const handleDeleteContact = async id => {
+    await deleteContact(id);
+  };
   return (
     <li className={styles.contactListItem}>
       <span>{name}:</span> {number}
-      <button type="button" onClick={() => deleteContact(id)}>
+      <button type="button" onClick={() => handleDeleteContact(id)}>
         <ImBin style={{ marginRight: 5 }} />
         Delete
       </button>
