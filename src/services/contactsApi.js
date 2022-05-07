@@ -9,13 +9,10 @@ export const contactsApi = createApi({
   endpoints: build => ({
     getContacts: build.query({
       query: () => 'contacts',
-      providesTags: result =>
+      providesTags: (result, error, arg) =>
         result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Contacts', id })),
-              { type: 'Contacts', id: 'LIST' },
-            ]
-          : [{ type: 'Contacts', id: 'LIST' }],
+          ? [...result.map(({ id }) => ({ type: 'Contacts', id })), 'Contacts']
+          : ['Contacts'],
     }),
     addContact: build.mutation({
       query: body => ({
@@ -23,25 +20,14 @@ export const contactsApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [
-        {
-          type: 'Contacts',
-          id: 'LIST',
-        },
-      ],
+      invalidatesTags: ['Contacts'],
     }),
     deleteContact: build.mutation({
       query: id => ({
         url: `contacts/${id}`,
         method: 'DELETE',
       }),
-
-      invalidatesTags: [
-        {
-          type: 'Contacts',
-          id: 'LIST',
-        },
-      ],
+      invalidatesTags: ['Contacts'],
     }),
   }),
 });

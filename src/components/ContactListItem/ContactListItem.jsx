@@ -5,9 +5,13 @@ import { useDeleteContactMutation } from 'services/contactsApi';
 
 export const ContactListItem = ({ id, name, number }) => {
   const [deleteContact] = useDeleteContactMutation();
-  const handleDeleteContact = async id => {
-    await deleteContact(id);
+  const handleDeleteContact = id => {
+    deleteContact(id)
+      .unwrap()
+      .then(payload => console.log('fulfilled', payload))
+      .catch(error => console.error('rejected', error));
   };
+
   return (
     <li className={styles.contactListItem}>
       <span>{name}:</span> {number}

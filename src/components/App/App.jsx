@@ -15,7 +15,7 @@ import { getVisibleContacts } from 'utils/getVisibleContacts';
 export const App = () => {
   const [filter, setFilter] = useState('');
   const { data = [], isLoading } = useGetContactsQuery();
-  const visibleContacts = getVisibleContacts(data, filter);
+  const visibleContacts = data && getVisibleContacts(data, filter);
 
   return (
     <Container>
@@ -25,7 +25,7 @@ export const App = () => {
 
       {isLoading ? (
         <Loader />
-      ) : data.length > 0 ? (
+      ) : data?.length > 0 ? (
         <Filter
           value={filter}
           onInputChange={e => setFilter(e.currentTarget.value)}
@@ -33,7 +33,7 @@ export const App = () => {
       ) : (
         <p> There are no any contacts in your phonebook</p>
       )}
-      <ContactList contacts={visibleContacts} />
+      {visibleContacts && <ContactList contacts={visibleContacts} />}
       <ToastContainer autoClose={3000} />
     </Container>
   );

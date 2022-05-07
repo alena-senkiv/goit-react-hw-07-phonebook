@@ -12,7 +12,7 @@ const nameInputId = uuidv4();
 const numberInputId = uuidv4();
 
 export const ContactForm = () => {
-  const { data } = useGetContactsQuery();
+  const { data = [] } = useGetContactsQuery();
   const [addContact] = useAddContactMutation();
 
   const handleSubmit = e => {
@@ -27,7 +27,7 @@ export const ContactForm = () => {
       return;
     }
 
-    if (data.find(({ name }) => name.toLowerCase() === normalizedName)) {
+    if (data?.find(({ name }) => name.toLowerCase() === normalizedName)) {
       toast.warn(`${name} is already in contacts`);
       return;
     }
